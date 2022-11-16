@@ -5,19 +5,19 @@ import java.util.*
 val scanner = Scanner(System.`in`)
 
 fun mainMenu() : Int {
-    println("")
-    println("--------------------")
-    println("PLATFORM KEEPER APP")
-    println("--------------------")
-    println("PLATFORM MENU")
-    println("  1) Add a platform")
-    println("  2) List all platforms")
-    println("  3) Update a platform")
-    println("  4) Delete a platform")
-    println("--------------------")
-    println("  0) Exit")
-    println("--------------------")
-    print("==>> ")
+    print(""" 
+         > ----------------------------------
+         > |        PLATFORM GAME APP         |
+         > ----------------------------------
+         > | PLATFORM MENU                      |
+         > |   1) Add a platform                |
+         > |   2) List all platforms            |
+         > |   3) Update a platform             |
+         > |   4) Delete a platform             |
+         > ----------------------------------
+         > |   0) Exit                      |
+         > ----------------------------------
+         > ==>> """.trimMargin(">"))
     return scanner.nextInt()
 }
 
@@ -30,7 +30,7 @@ fun runMenu() {
             3  -> updatePlatform()
             4  -> deletePlatform()
             0  -> exitApp()
-            else -> println("Invalid option entered: " + option)
+            else -> println("Invalid option entered: ${option}")
         }
     } while (true)
 }
