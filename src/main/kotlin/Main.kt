@@ -1,11 +1,8 @@
+import utils.ScannerInput
 import java.lang.System.exit
-import java.util.*
-
-
-val scanner = Scanner(System.`in`)
 
 fun mainMenu() : Int {
-    print(""" 
+    return ScannerInput.readNextInt(""" 
          > ----------------------------------
          > |        PLATFORM GAME APP         |
          > ----------------------------------
@@ -18,7 +15,6 @@ fun mainMenu() : Int {
          > |   0) Exit                      |
          > ----------------------------------
          > ==>> """.trimMargin(">"))
-    return scanner.nextInt()
 }
 
 fun runMenu() {
