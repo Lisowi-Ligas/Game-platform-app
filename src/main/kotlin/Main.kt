@@ -1,3 +1,4 @@
+import mu.KotlinLogging
 import utils.ScannerInput
 import java.lang.System.exit
 
@@ -32,25 +33,27 @@ fun runMenu() {
 }
 
 fun addPlatform(){
-    println("You chose Add Platform")
+    logger.info { "addPlatform() function invoked" }
 }
 
 fun listPlatforms(){
-    println("You chose List Platforms")
+    logger.info { "listPlatforms() function invoked" }
 }
 
 fun updatePlatform(){
-    println("You chose Update Platform")
+    logger.info { "updatePlatform() function invoked" }
 }
 
 fun deletePlatform(){
-    println("You chose Delete Platform")
+    logger.info { "deletePlatform() function invoked" }
 }
 
 fun exitApp(){
     println("Stay safe & Don't die")
     exit(0)
 }
+
+private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
     runMenu()

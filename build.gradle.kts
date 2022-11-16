@@ -27,3 +27,16 @@ tasks.withType<KotlinCompile> {
 application {
     mainClass.set("MainKt")
 }
+
+dependencies {
+    testImplementation(kotlin("test"))
+    // dependencies for logging
+    implementation("io.github.microutils:kotlin-logging:3.0.4")
+    }
+
+    dependencies {
+        testImplementation(kotlin("test"))
+        // dependencies for logging
+        implementation("io.github.microutils:kotlin-logging:2.1.23")
+        implementation("org.slf4j:slf4j-simple:2.0.3")
+    }
