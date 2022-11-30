@@ -2,6 +2,7 @@ package controllers
 
 import models.Platform
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -61,4 +62,22 @@ class PlatformAPITest {
         assertEquals(1, emptyPlatforms!!.numberOfPlatforms())
         assertEquals(newPlatform, emptyPlatforms!!.findPlatform(emptyPlatforms!!.numberOfPlatforms() - 1))
     }
+
+    @Test
+    fun `listAllPlatforms returns No Platforms Stored message when ArrayList is empty`() {
+        assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
+        assertTrue(emptyPlatforms!!.listAllPlatforms().lowercase().contains("no platforms"))
+    }
+
+    @Test
+    fun `listAllPlatforms returns Notes when ArrayList has notes stored`() {
+        assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+        val platformsString = populatedPlatforms!!.listAllPlatforms().lowercase()
+        assertFalse(platformsString.contains("Windows"))
+        assertFalse(platformsString.contains("Linux"))
+        assertFalse(platformsString.contains("Mac"))
+        assertFalse(platformsString.contains("Xbox"))
+        assertFalse(platformsString.contains("Playstation"))
+    }
+
 }
