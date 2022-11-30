@@ -61,5 +61,4 @@ class PlatformAPITest {
         assertEquals(1, emptyPlatforms!!.numberOfPlatforms())
         assertEquals(newPlatform, emptyPlatforms!!.findPlatform(emptyPlatforms!!.numberOfPlatforms() - 1))
     }
-
 }
