@@ -10,15 +10,15 @@ class PlatformAPI {
         return platforms.add(platform)
     }
 
-    fun listAllGames(): String {
+    fun listAllPlatforms(): String {
         return if (platforms.isEmpty()) {
-            "No games stored"
+            "No platforms stored"
         } else {
-            var listOfGames = ""
+            var listOfPlatforms = ""
             for (i in platforms.indices) {
-                listOfGames += "${i}: ${platforms[i]} \n"
+                listOfPlatforms += "${i}: ${platforms[i]} \n"
             }
-            listOfGames
+            listOfPlatforms
         }
     }
 
