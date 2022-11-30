@@ -47,12 +47,19 @@ class PlatformAPITest {
     @Test
     fun `adding a Platform to a populated list adds to ArrayList`(){
         val newPlatform = Platform("NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
+        assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
         assertTrue(populatedPlatforms!!.add(newPlatform))
+        assertEquals(6, populatedPlatforms!!.numberOfPlatforms())
+        assertEquals(newPlatform, populatedPlatforms!!.findPlatform(populatedPlatforms!!.numberOfPlatforms() - 1))
     }
 
     @Test
     fun `adding a Platform to an empty list adds to ArrayList`(){
         val newPlatform = Platform("NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
+        assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
         assertTrue(emptyPlatforms!!.add(newPlatform))
+        assertEquals(1, emptyPlatforms!!.numberOfPlatforms())
+        assertEquals(newPlatform, emptyPlatforms!!.findPlatform(emptyPlatforms!!.numberOfPlatforms() - 1))
     }
+
 }
