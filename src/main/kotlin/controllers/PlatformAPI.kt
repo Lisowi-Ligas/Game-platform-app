@@ -85,4 +85,34 @@ class PlatformAPI {
         return counter
     }
 
+    fun listPlatformsBySelectedPopularity(popularity: Int): String {
+        return if (platforms.isEmpty()) {
+            "No platforms stored"
+        } else {
+            var listOfPlatforms = ""
+            for (i in platforms.indices) {
+                if (platforms[i].platformPopularity == popularity) {
+                    listOfPlatforms +=
+                        """$i: ${platforms[i]}
+                        """.trimIndent()
+                }
+            }
+            if (listOfPlatforms.equals("")) {
+                "No platforms with popularity: $popularity"
+            } else {
+                "${numberOfPlatformsByPopularity(popularity)} platforms with popularity $popularity: $listOfPlatforms"
+            }
+        }
+    }
+
+    fun numberOfPlatformsByPopularity(popularity: Int): Int {
+        var counter = 0
+        for (platform in platforms) {
+            if (platform.platformPopularity == popularity) {
+                counter++
+            }
+        }
+        return counter
+    }
+
 }
