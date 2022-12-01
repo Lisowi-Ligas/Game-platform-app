@@ -81,4 +81,42 @@ class PlatformAPITest {
         assertFalse(platformsString.contains("Playstation"))
     }
 
+    @Test
+    fun `listActivePlatforms returns no active platforms stored when ArrayList is empty`() {
+        assertEquals(0, emptyPlatforms!!.numberOfActivePlatforms())
+        assertTrue(
+            emptyPlatforms!!.listActivePlatforms().lowercase().contains("no active platforms")
+        )
+    }
+
+    @Test
+    fun `listActivePlatforms returns active platforms when ArrayList has active platforms stored`() {
+        assertEquals(5, populatedPlatforms!!.numberOfActivePlatforms())
+        val activePlatformsString = populatedPlatforms!!.listActivePlatforms().lowercase()
+        assertFalse(activePlatformsString.contains("Windows"))
+        assertFalse(activePlatformsString.contains("Linux"))
+        assertFalse(activePlatformsString.contains("Mac"))
+        assertFalse(activePlatformsString.contains("Xbox"))
+        assertFalse(activePlatformsString.contains("Playstation"))
+    }
+
+    @Test
+    fun `listDiscontinuedPlatforms returns no discontinued platforms when ArrayList is empty`() {
+        assertEquals(0, emptyPlatforms!!.numberOfDiscontinuedPlatforms())
+        assertFalse(
+            emptyPlatforms!!.listDiscontinuedPlatforms().lowercase().contains("no discontinued platforms")
+        )
+    }
+
+    @Test
+    fun `listDiscontinuedPlatforms returns discontinued platforms when ArrayList has discontinued platforms stored`() {
+        assertEquals(0, populatedPlatforms!!.numberOfDiscontinuedPlatforms())
+        val discontinuedPlatformsString = populatedPlatforms!!.listDiscontinuedPlatforms().lowercase(Locale.getDefault())
+        assertFalse(discontinuedPlatformsString.contains("Windows"))
+        assertFalse(discontinuedPlatformsString.contains("Linux"))
+        assertFalse(discontinuedPlatformsString.contains("Mac"))
+        assertFalse(discontinuedPlatformsString.contains("Xbox"))
+        assertFalse(discontinuedPlatformsString.contains("Playstation"))
+    }
+
 }
