@@ -114,5 +114,4 @@ class PlatformAPI {
         }
         return counter
     }
-
 }
