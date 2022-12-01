@@ -37,4 +37,52 @@ class PlatformAPI {
         return (index >= 0 && index < list.size)
     }
 
+    fun listActivePlatforms(): String {
+        return if (numberOfActivePlatforms() == 0) {
+            "No active platforms stored"
+        } else {
+            var listOfActivePlatforms = ""
+            for (platform in platforms) {
+                if (!platform.isPlatformDiscontinued) {
+                    listOfActivePlatforms += "${platforms.indexOf(platform)}: $platform \n"
+                }
+            }
+            listOfActivePlatforms
+        }
+    }
+
+    fun listDiscontinuedPlatforms(): String {
+        return if (numberOfDiscontinuedPlatforms() == 0) {
+            "No archived notes stored"
+        } else {
+            var listOfDiscontinuedPlatforms = ""
+            for (platform in platforms) {
+                if (platform.isPlatformDiscontinued) {
+                    listOfDiscontinuedPlatforms += "${platforms.indexOf(platform)}: $platform \n"
+                }
+            }
+            listOfDiscontinuedPlatforms
+        }
+    }
+
+    fun numberOfDiscontinuedPlatforms(): Int {
+        var counter = 0
+        for (platform in platforms) {
+            if (platform.isPlatformDiscontinued) {
+                counter++
+            }
+        }
+        return counter
+    }
+
+    fun numberOfActivePlatforms(): Int {
+        var counter = 0
+        for (platform in platforms) {
+            if (!platform.isPlatformDiscontinued) {
+                counter++
+            }
+        }
+        return counter
+    }
+
 }
