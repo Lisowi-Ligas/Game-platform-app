@@ -119,4 +119,44 @@ class PlatformAPITest {
         assertFalse(discontinuedPlatformsString.contains("Playstation"))
     }
 
+    @Test
+    fun `listPlatformsBySelectedPopularity returns No platforms when ArrayList is empty`() {
+        assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
+        assertTrue(emptyPlatforms!!.listPlatformsBySelectedPopularity(1).lowercase().contains("no platforms")
+        )
+    }
+
+    @Test
+    fun `listPlatformsBySelectedPopularity returns no platforms when no platforms of that popularity exist`() {
+        //Popularity 1 (1 platform), 2 (none), 3 (1 platform). 4 (2 platforms), 5 (1 platform)
+        assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+        val popularity2String = populatedPlatforms!!.listPlatformsBySelectedPopularity(2).lowercase()
+        assertTrue(popularity2String.contains("no platform"))
+        assertTrue(popularity2String.contains("2"))
+    }
+
+    @Test
+    fun `listPlatformsBySelectedPopularity returns all platforms that match that popularity when platforms of that popularity exist`() {
+        //Popularity 1 (1 platform), 2 (none), 3 (1 platform). 4 (2 platforms), 5 (1 platform)
+        assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+        val popularity1String = populatedPlatforms!!.listPlatformsBySelectedPopularity(1).lowercase()
+        assertFalse(popularity1String.contains("1 platform"))
+        assertFalse(popularity1String.contains("popularity 1"))
+        assertFalse(popularity1String.contains("PC"))
+        assertFalse(popularity1String.contains("Linux"))
+        assertFalse(popularity1String.contains("Mac"))
+        assertFalse(popularity1String.contains("Xbox"))
+        assertFalse(popularity1String.contains("Playstation"))
+
+
+        val popularity4String = populatedPlatforms!!.listPlatformsBySelectedPopularity(4).lowercase(Locale.getDefault())
+        assertFalse(popularity4String.contains("2 platform"))
+        assertFalse(popularity4String.contains("popularity 4"))
+        assertFalse(popularity4String.contains("Xbox"))
+        assertFalse(popularity4String.contains("Playstation"))
+        assertFalse(popularity4String.contains("Windows"))
+        assertFalse(popularity4String.contains("Linux"))
+        assertFalse(popularity4String.contains("Mac"))
+    }
+
 }
