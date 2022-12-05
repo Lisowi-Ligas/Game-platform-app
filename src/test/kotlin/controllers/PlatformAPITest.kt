@@ -2,9 +2,9 @@ package controllers
 
 import models.Platform
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
@@ -157,6 +157,26 @@ class PlatformAPITest {
         assertFalse(popularity4String.contains("Windows"))
         assertFalse(popularity4String.contains("Linux"))
         assertFalse(popularity4String.contains("Mac"))
+    }
+
+    @Nested
+    inner class DeletePlatforms {
+
+        @Test
+        fun `deleting a Platform that does not exist, returns null`() {
+            assertNull(emptyPlatforms!!.deletePlatform(0))
+            assertNull(populatedPlatforms!!.deletePlatform(-1))
+            assertNull(populatedPlatforms!!.deletePlatform(5))
+        }
+
+        @Test
+        fun `deleting a platform that exists delete and returns deleted object`() {
+            assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+            assertEquals(Xbox, populatedPlatforms!!.deletePlatform(4))
+            assertEquals(4, populatedPlatforms!!.numberOfPlatforms())
+            assertEquals(Playstation, populatedPlatforms!!.deletePlatform(0))
+            assertEquals(3, populatedPlatforms!!.numberOfPlatforms())
+        }
     }
 
 }
