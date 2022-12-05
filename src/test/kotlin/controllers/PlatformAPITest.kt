@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import persistence.JSONSerializer
 import persistence.XMLSerializer
 import java.io.File
 import java.util.*
@@ -253,5 +254,42 @@ class PlatformAPITest {
         }
     }
 
+    @Test
+    fun `saving and loading an empty collection in JSON doesn't crash app`() {
+        // Saving an empty platforms.json file.
+        val storingPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        storingPlatforms.store()
+
+        //Loading the empty platforms.json file into a new object
+        val loadedPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        loadedPlatforms.load()
+
+        //Comparing the source of the platforms (storingPlatforms) with the json loaded platforms (loadedPlatforms)
+        assertEquals(0, storingPlatforms.numberOfPlatforms())
+        assertEquals(0, loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+    }
+
+    @Test
+    fun `saving and loading an loaded collection in JSON doesn't loose data`() {
+        // Storing 3 platforms to the platforms.json file.
+        val storingPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        storingPlatforms.add(Windows!!)
+        storingPlatforms.add(Linux!!)
+        storingPlatforms.add(Mac!!)
+        storingPlatforms.store()
+
+        //Loading notes.json into a different collection
+        val loadedPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        loadedPlatforms.load()
+
+        //Comparing the source of the platforms (storingPlatforms) with the json loaded platforms (loadedPlatforms)
+        assertEquals(3, storingPlatforms.numberOfPlatforms())
+        assertEquals(3, loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.findPlatform(0), loadedPlatforms.findPlatform(0))
+        assertEquals(storingPlatforms.findPlatform(1), loadedPlatforms.findPlatform(1))
+        assertEquals(storingPlatforms.findPlatform(2), loadedPlatforms.findPlatform(2))
+    }
 
 }
