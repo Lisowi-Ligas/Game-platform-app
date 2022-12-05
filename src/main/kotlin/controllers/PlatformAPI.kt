@@ -1,8 +1,11 @@
 package controllers
 
 import models.Platform
+import persistence.Serializer
 
-class PlatformAPI {
+class PlatformAPI(serializerType: Serializer){
+
+    private var serializer: Serializer = serializerType
     private var platforms = ArrayList<Platform>()
 
 
@@ -141,6 +144,16 @@ class PlatformAPI {
 
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, platforms);
+    }
+
+    @Throws(Exception::class)
+    fun load() {
+        platforms = serializer.read() as ArrayList<Platform>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(platforms)
     }
 
 }

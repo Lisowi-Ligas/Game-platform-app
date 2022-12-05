@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import persistence.XMLSerializer
+import java.io.File
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -16,8 +18,8 @@ class PlatformAPITest {
     private var Mac: Platform? = null
     private var Xbox: Platform? = null
     private var Playstation: Platform? = null
-    private var populatedPlatforms: PlatformAPI? = PlatformAPI()
-    private var emptyPlatforms: PlatformAPI? = PlatformAPI()
+    private var populatedPlatforms: PlatformAPI? = PlatformAPI(XMLSerializer(File("platforms.xml")))
+    private var emptyPlatforms: PlatformAPI? = PlatformAPI(XMLSerializer(File("platforms.xml")))
 
     @BeforeEach
     fun setup(){
