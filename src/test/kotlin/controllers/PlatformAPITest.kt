@@ -27,7 +27,7 @@ class PlatformAPITest {
         Xbox = Platform("Xbox", "XboxSeriesX", "500 Euro", 7,5,false)
         Playstation = Platform("Playstation", "5", "500", 7,5,false)
 
-        //adding 5 Note to the notes api
+        //adding 5 platform to the platforms api
         populatedPlatforms!!.add(Windows!!)
         populatedPlatforms!!.add(Linux!!)
         populatedPlatforms!!.add(Mac!!)
@@ -179,5 +179,33 @@ class PlatformAPITest {
         }
     }
 
+    @Nested
+    inner class UpdatePlatforms {
+        @Test
+        fun `updating a platform that does not exist returns false`(){
+            assertFalse(populatedPlatforms!!.updatePlatform(6, Platform("Updating Platform", "Title", "1200 Euro", 8,10,false)))
+            assertFalse(populatedPlatforms!!.updatePlatform(-1, Platform("Updating Platform", "Title", "1400 Euro", 8,10,false)))
+            assertFalse(emptyPlatforms!!.updatePlatform(0, Platform("Updating Platform", "Title", "1300 Euro", 8,10,false)))
+        }
+
+        @Test
+        fun `updating a platform that exists returns true and updates`() {
+            //check platform 5 exists and check the contents
+            assertEquals(Playstation, populatedPlatforms!!.findPlatform(4))
+            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformModel)
+            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
+            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformCost)
+            assertEquals(8, populatedPlatforms!!.findPlatform(4)!!.platformPopularity)
+            assertEquals(10, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
+
+            //update platform 5 with new information and ensure contents updated successfully
+            assertTrue(populatedPlatforms!!.updatePlatform(4, Platform("Updating Platform", "Title", "1000 Euro",8,10, false)))
+            assertEquals("Updating Platform", populatedPlatforms!!.findPlatform(4)!!.platformModel)
+            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
+            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformCost)
+            assertEquals(8, populatedPlatforms!!.findPlatform(4)!!.platformPopularity)
+            assertEquals(10, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
+        }
+    }
 
 }

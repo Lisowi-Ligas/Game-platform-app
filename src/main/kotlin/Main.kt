@@ -57,8 +57,29 @@ fun listPlatforms(){
     println(platformAPI.listAllPlatforms())
 }
 
-fun updatePlatform(){
-    logger.info { "updatePlatform() function invoked" }
+fun updatePlatform() {
+    //logger.info { "updatePlatforms() function invoked" }
+    listPlatforms()
+    if (platformAPI.numberOfPlatforms() > 0) {
+        //only ask the user to choose the platform if notes exist
+        val indexToUpdate = readNextInt("Enter the index of the platform to update: ")
+        if (platformAPI.isValidIndex(indexToUpdate)) {
+            val platformModel = readNextLine("Enter a model for the platform: ")
+            val platformTitle = readNextLine("Enter a title for the platform: ")
+            val platformCost = readNextLine("Enter a cost for the platform: ")
+            val platformPopularity = readNextInt("Enter a popularity for the platform(1 low -10 high): ")
+            val platformVersion = readNextInt("Enter a version for the platform: ")
+
+            //pass the index of the note and the new note details to NoteAPI for updating and check for success.
+            if (platformAPI.updatePlatform(indexToUpdate, Platform(platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false ))){
+                println("Update Successful")
+            } else {
+                println("Update Failed")
+            }
+        } else {
+            println("There are no platforms for this index number")
+        }
+    }
 }
 
 fun deletePlatform(){

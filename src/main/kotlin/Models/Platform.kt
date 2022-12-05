@@ -1,9 +1,9 @@
 package models
 
-data class Platform(val platformModel: String,
-                    val platformTitle: String,
-                    val platformCost: String,
-                    val platformPopularity: Int,
-                    val platformVersion: Int,
-                    val isPlatformDiscontinued :Boolean){
+data class Platform(var platformModel: String,
+                    var platformTitle: String,
+                    var platformCost: String,
+                    var platformPopularity: Int,
+                    var platformVersion: Int,
+                    var isPlatformDiscontinued :Boolean){
 }
