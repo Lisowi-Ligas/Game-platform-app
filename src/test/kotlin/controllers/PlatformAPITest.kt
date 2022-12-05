@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import persistence.JSONSerializer
+import persistence.XMLSerializer
+import java.io.File
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -16,8 +19,8 @@ class PlatformAPITest {
     private var Mac: Platform? = null
     private var Xbox: Platform? = null
     private var Playstation: Platform? = null
-    private var populatedPlatforms: PlatformAPI? = PlatformAPI()
-    private var emptyPlatforms: PlatformAPI? = PlatformAPI()
+    private var populatedPlatforms: PlatformAPI? = PlatformAPI(XMLSerializer(File("platforms.xml")))
+    private var emptyPlatforms: PlatformAPI? = PlatformAPI(XMLSerializer(File("platforms.xml")))
 
     @BeforeEach
     fun setup(){
@@ -192,20 +195,101 @@ class PlatformAPITest {
         fun `updating a platform that exists returns true and updates`() {
             //check platform 5 exists and check the contents
             assertEquals(Playstation, populatedPlatforms!!.findPlatform(4))
-            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformModel)
-            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
-            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformCost)
-            assertEquals(8, populatedPlatforms!!.findPlatform(4)!!.platformPopularity)
-            assertEquals(10, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
+            assertEquals("Playstation", populatedPlatforms!!.findPlatform(4)!!.platformModel)
+            assertEquals("5", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
+            assertEquals("500", populatedPlatforms!!.findPlatform(4)!!.platformCost)
+            assertEquals(7, populatedPlatforms!!.findPlatform(4)!!.platformPopularity)
+            assertEquals(5, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
 
             //update platform 5 with new information and ensure contents updated successfully
             assertTrue(populatedPlatforms!!.updatePlatform(4, Platform("Updating Platform", "Title", "1000 Euro",8,10, false)))
             assertEquals("Updating Platform", populatedPlatforms!!.findPlatform(4)!!.platformModel)
-            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
-            assertEquals("Random", populatedPlatforms!!.findPlatform(4)!!.platformCost)
+            assertEquals("Title", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
+            assertEquals("1000 Euro", populatedPlatforms!!.findPlatform(4)!!.platformCost)
             assertEquals(8, populatedPlatforms!!.findPlatform(4)!!.platformPopularity)
             assertEquals(10, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
         }
+    }
+
+
+    @Nested
+    inner class PersistenceTests {
+
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty platforms.XML file.
+            val storingPlatforms = PlatformAPI(XMLSerializer(File("platforms.xml")))
+            storingPlatforms.store()
+
+            //Loading the empty platforms.xml file into a new object
+            val loadedPlatforms = PlatformAPI(XMLSerializer(File("platforms.xml")))
+            loadedPlatforms.load()
+
+            //Comparing the source of the platforms (storingPlatforms) with the XML loaded platforms (loadedPlatforms)
+            assertEquals(0, storingPlatforms.numberOfPlatforms())
+            assertEquals(0, loadedPlatforms.numberOfPlatforms())
+            assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+        }
+
+        @Test
+        fun `saving and loading a loaded collection in XML doesn't loose data`() {
+            // Storing 3 platforms to the platforms.XML file.
+            val storingPlatforms = PlatformAPI(XMLSerializer(File("platforms.xml")))
+            storingPlatforms.add(Windows!!)
+            storingPlatforms.add(Linux!!)
+            storingPlatforms.add(Mac!!)
+            storingPlatforms.store()
+
+            //Loading platforms.xml into a different collection
+            val loadedPlatforms = PlatformAPI(XMLSerializer(File("platforms.xml")))
+            loadedPlatforms.load()
+
+            //Comparing the source of the platforms (storingPlatforms) with the XML loaded platforms (loadedPlatforms)
+            assertEquals(3, storingPlatforms.numberOfPlatforms())
+            assertEquals(3, loadedPlatforms.numberOfPlatforms())
+            assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+            assertEquals(storingPlatforms.findPlatform(0), loadedPlatforms.findPlatform(0))
+            assertEquals(storingPlatforms.findPlatform(1), loadedPlatforms.findPlatform(1))
+            assertEquals(storingPlatforms.findPlatform(2), loadedPlatforms.findPlatform(2))
+        }
+    }
+
+    @Test
+    fun `saving and loading an empty collection in JSON doesn't crash app`() {
+        // Saving an empty platforms.json file.
+        val storingPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        storingPlatforms.store()
+
+        //Loading the empty platforms.json file into a new object
+        val loadedPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        loadedPlatforms.load()
+
+        //Comparing the source of the platforms (storingPlatforms) with the json loaded platforms (loadedPlatforms)
+        assertEquals(0, storingPlatforms.numberOfPlatforms())
+        assertEquals(0, loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+    }
+
+    @Test
+    fun `saving and loading an loaded collection in JSON doesn't loose data`() {
+        // Storing 3 platforms to the platforms.json file.
+        val storingPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        storingPlatforms.add(Windows!!)
+        storingPlatforms.add(Linux!!)
+        storingPlatforms.add(Mac!!)
+        storingPlatforms.store()
+
+        //Loading notes.json into a different collection
+        val loadedPlatforms = PlatformAPI(JSONSerializer(File("platforms.json")))
+        loadedPlatforms.load()
+
+        //Comparing the source of the platforms (storingPlatforms) with the json loaded platforms (loadedPlatforms)
+        assertEquals(3, storingPlatforms.numberOfPlatforms())
+        assertEquals(3, loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.numberOfPlatforms(), loadedPlatforms.numberOfPlatforms())
+        assertEquals(storingPlatforms.findPlatform(0), loadedPlatforms.findPlatform(0))
+        assertEquals(storingPlatforms.findPlatform(1), loadedPlatforms.findPlatform(1))
+        assertEquals(storingPlatforms.findPlatform(2), loadedPlatforms.findPlatform(2))
     }
 
 }

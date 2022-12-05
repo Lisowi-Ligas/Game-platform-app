@@ -1,10 +1,16 @@
 import controllers.PlatformAPI
 import models.Platform
 import mu.KotlinLogging
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import java.io.File
 import java.lang.System.exit
+
+//private val platformAPI = PlatformAPI(XMLSerializer(File("platforms.xml")))
+private val platformAPI = PlatformAPI(JSONSerializer(File("platforms.json")))
 
 fun mainMenu() : Int {
     return ScannerInput.readNextInt(""" 
@@ -109,4 +115,18 @@ fun main(args: Array<String>) {
     runMenu()
 }
 
-private val platformAPI = PlatformAPI()
+fun save() {
+    try {
+        platformAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+fun load() {
+    try {
+        platformAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
+}
