@@ -172,11 +172,12 @@ class PlatformAPITest {
         @Test
         fun `deleting a platform that exists delete and returns deleted object`() {
             assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
-            assertEquals(Xbox, populatedPlatforms!!.deletePlatform(4))
+            assertEquals(Playstation, populatedPlatforms!!.deletePlatform(4))
             assertEquals(4, populatedPlatforms!!.numberOfPlatforms())
-            assertEquals(Playstation, populatedPlatforms!!.deletePlatform(0))
+            assertEquals(Windows, populatedPlatforms!!.deletePlatform(0))
             assertEquals(3, populatedPlatforms!!.numberOfPlatforms())
         }
     }
+
 
 }
