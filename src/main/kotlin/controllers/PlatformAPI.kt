@@ -114,4 +114,11 @@ class PlatformAPI {
         }
         return counter
     }
+
+    fun deletePlatform(indexToDelete: Int): Platform? {
+        return if (isValidListIndex(indexToDelete, platforms)) {
+            platforms.removeAt(indexToDelete)
+        } else null
+    }
+
 }
