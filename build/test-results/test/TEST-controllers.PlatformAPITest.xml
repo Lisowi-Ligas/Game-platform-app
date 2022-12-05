@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="controllers.PlatformAPITest" tests="11" skipped="0" failures="0" errors="0" timestamp="2022-12-05T16:45:26" hostname="MSI" time="0.036">
+  <properties/>
+  <testcase name="adding a Platform to an empty list adds to ArrayList()" classname="controllers.PlatformAPITest" time="0.021"/>
+  <testcase name="listActivePlatforms returns active platforms when ArrayList has active platforms stored()" classname="controllers.PlatformAPITest" time="0.007"/>
+  <testcase name="listAllPlatforms returns No Platforms Stored message when ArrayList is empty()" classname="controllers.PlatformAPITest" time="0.001"/>
+  <testcase name="listPlatformsBySelectedPopularity returns no platforms when no platforms of that popularity exist()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <testcase name="listPlatformsBySelectedPopularity returns No platforms when ArrayList is empty()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <testcase name="listDiscontinuedPlatforms returns discontinued platforms when ArrayList has discontinued platforms stored()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <testcase name="listActivePlatforms returns no active platforms stored when ArrayList is empty()" classname="controllers.PlatformAPITest" time="0.001"/>
+  <testcase name="adding a Platform to a populated list adds to ArrayList()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <testcase name="listDiscontinuedPlatforms returns no discontinued platforms when ArrayList is empty()" classname="controllers.PlatformAPITest" time="0.001"/>
+  <testcase name="listPlatformsBySelectedPopularity returns all platforms that match that popularity when platforms of that popularity exist()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <testcase name="listAllPlatforms returns Notes when ArrayList has notes stored()" classname="controllers.PlatformAPITest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
