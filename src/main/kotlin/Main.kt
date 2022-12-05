@@ -54,7 +54,7 @@ fun addPlatform(){
 
 fun listPlatforms(){
     //logger.info { "listNotes() function invoked" }
-    println(platformAPI.listAllGames())
+    println(platformAPI.listAllPlatforms())
 }
 
 fun updatePlatform(){
@@ -62,7 +62,19 @@ fun updatePlatform(){
 }
 
 fun deletePlatform(){
-    logger.info { "deletePlatform() function invoked" }
+    //logger.info { "deletePlatforms() function invoked" }
+    listPlatforms()
+    if (platformAPI.numberOfPlatforms() > 0) {
+        //only ask the user to choose the platform to delete if platforms exist
+        val indexToDelete = readNextInt("Enter the index of the platform to delete: ")
+        //pass the index of the platform to PlatformAPI for deleting and check for success.
+        val platformToDelete = platformAPI.deletePlatform(indexToDelete)
+        if (platformToDelete != null) {
+            println("Delete Successful! Deleted platform: ${platformToDelete.platformTitle}")
+        } else {
+            println("Delete NOT Successful")
+        }
+    }
 }
 
 fun exitApp(){
