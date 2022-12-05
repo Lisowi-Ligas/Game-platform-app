@@ -121,4 +121,26 @@ class PlatformAPI {
         } else null
     }
 
+    fun updatePlatform(indexToUpdate: Int, platform: Platform?): Boolean {
+        //find the platform object by the index number
+        val foundPlatform = findPlatform(indexToUpdate)
+
+        //if the platform exists, use the platform details passed as parameters to update the found platform in the ArrayList.
+        if ((foundPlatform != null) && (platform != null)) {
+            foundPlatform.platformModel = platform.platformModel
+            foundPlatform.platformTitle = platform.platformTitle
+            foundPlatform.platformCost = platform.platformCost
+            foundPlatform.platformPopularity = platform.platformPopularity
+            foundPlatform.platformVersion = platform.platformVersion
+            return true
+        }
+
+        //if the platform was not found, return false, indicating that the update was not successful
+        return false
+    }
+
+    fun isValidIndex(index: Int) :Boolean{
+        return isValidListIndex(index, platforms);
+    }
+
 }
