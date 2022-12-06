@@ -1,4 +1,5 @@
 import controllers.PlatformAPI
+import models.Game
 import models.Platform
 import mu.KotlinLogging
 import persistence.JSONSerializer
@@ -51,6 +52,9 @@ fun runMenu() {
             3 -> updatePlatform()
             4 -> deletePlatform()
             5 -> archivePlatform()
+            6 -> searchPlatforms()
+            7 -> addGameToPlatform()
+            9 -> updateGameInfoInPlatform()
             20 -> save()
             21 -> load()
             0 -> exitApp()
@@ -199,4 +203,61 @@ fun searchPlatforms() {
     } else {
         println(searchResults)
     }
+}
+
+private fun addGameToPlatform() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        if (platform.addGame(Game(gameName = readNextLine("\t Game Name: "),gameGenre = readNextLine("\t Game Genre: "),gameAgeRating = readNextInt("\t Game Age Rating: "),gameStar = readNextLine("\t Game Star Rating: "))))
+            println("Add Successful!")
+        else println("Add NOT Successful")
+    }
+}
+
+fun updateGameInfoInPlatform() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            val newName = readNextLine("Enter new name: ")
+            val newGenre = readNextLine("Enter new genre: ")
+            val newAgeRating = readNextInt("Enter new age rating: ")
+            val newStarRating = readNextLine("Enter new star rating: ")
+            if (platform.update(game.gameId, Game(gameName = newName,gameGenre = newGenre,gameAgeRating = newAgeRating,gameStar = newStarRating))) {
+                println("Game contents updated")
+            } else {
+                println("Game contents NOT updated")
+            }
+        } else {
+            println("Invalid Item Id")
+        }
+    }
+}
+
+private fun askUserToChooseGame(platform: Platform): Game? {
+    if (platform.numberOfGames() > 0) {
+        print(platform.listGames())
+        return platform.findOne(readNextInt("\nEnter the id of the game: "))
+    }
+    else{
+        println ("No games for chosen platform")
+        return null
+    }
+}
+
+private fun askUserToChooseActivePlatform(): Platform? {
+    listActivePlatforms()
+    if (platformAPI.numberOfActivePlatforms() > 0) {
+        val platform = platformAPI.findPlatform(readNextInt("\nEnter the id of the platform: "))
+        if (platform != null) {
+            if (platform.isPlatformDiscontinued) {
+                println("Platform is NOT Active, it is Discontinued")
+            } else {
+                return platform //chosen platform is active
+            }
+        } else {
+            println("Platform id is not valid")
+        }
+    }
+    return null //selected platform is not active
 }
