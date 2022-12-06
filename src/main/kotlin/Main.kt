@@ -96,7 +96,7 @@ fun addPlatform(){
     val platformCost = readNextLine("Enter a cost for the platform: ")
     val platformPopularity = readNextInt("Enter a popularity (1-low, 2, 3, 4, 5, 6, 7, 8, 9, 10-high): ")
     val platformVersion = readNextInt("Enter a version for the platform: ")
-    val isAdded = platformAPI.add(Platform(platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false))
+    val isAdded = platformAPI.add(Platform(0, platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false))
 
     if (isAdded) {
         println("Added Successfully")
@@ -119,7 +119,7 @@ fun updatePlatform() {
             val platformVersion = readNextInt("Enter a version for the platform: ")
 
             //pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (platformAPI.updatePlatform(indexToUpdate, Platform(platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false ))){
+            if (platformAPI.updatePlatform(indexToUpdate, Platform(0,platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false ))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
