@@ -2,6 +2,7 @@ package controllers
 
 import models.Platform
 import persistence.Serializer
+import utils.Utilities
 
 class PlatformAPI(serializerType: Serializer){
 
@@ -15,7 +16,7 @@ class PlatformAPI(serializerType: Serializer){
 
     fun listAllPlatforms(): String =
         if  (platforms.isEmpty()) "No platforms stored"
-        else formatListString(platforms)
+        else Utilities.formatListString(platforms)
 
     fun numberOfPlatforms(): Int {
         return platforms.size
@@ -35,11 +36,11 @@ class PlatformAPI(serializerType: Serializer){
 
     fun listActivePlatforms(): String =
         if  (numberOfActivePlatforms() == 0)  "No active platforms stored"
-        else formatListString(platforms.filter { platform -> !platform.isPlatformDiscontinued})
+        else Utilities.formatListString(platforms.filter { platform -> !platform.isPlatformDiscontinued})
 
     fun listDiscontinuedPlatforms(): String =
         if  (numberOfDiscontinuedPlatforms() == 0) "No archived platforms stored"
-        else formatListString(platforms.filter { platform -> platform.isPlatformDiscontinued})
+        else Utilities.formatListString(platforms.filter { platform -> platform.isPlatformDiscontinued})
 
     fun numberOfDiscontinuedPlatforms(): Int = platforms.count { platform: Platform -> platform.isPlatformDiscontinued }
 
@@ -48,7 +49,7 @@ class PlatformAPI(serializerType: Serializer){
     fun listPlatformsBySelectedPopularity(popularity: Int): String =
         if (platforms.isEmpty()) "No platforms stored"
         else {
-            val listOfPlatforms = formatListString(platforms.filter{ platform -> platform.platformPopularity == popularity})
+            val listOfPlatforms = Utilities.formatListString(platforms.filter{ platform -> platform.platformPopularity == popularity})
             if (listOfPlatforms.equals("")) "No platforms with popularity: $popularity"
             else "${numberOfPlatformsByPopularity(popularity)} platforms with popularity $popularity: $listOfPlatforms"
         }
@@ -106,12 +107,51 @@ class PlatformAPI(serializerType: Serializer){
     }
 
     fun searchByTitle (searchString : String) =
-        formatListString(
+        Utilities.formatListString(
             platforms.filter { platform -> platform.platformTitle.contains(searchString, ignoreCase = true) })
 
-    private fun formatListString(platformsToFormat : List<Platform>) : String =
-        platformsToFormat
-            .joinToString (separator = "\n") { platform ->
-                platforms.indexOf(platform).toString() + ": " + platform.toString() }
+
+    fun searchGameByName(searchString: String): String {
+        return if (numberOfPlatforms() == 0) "No platforms stored"
+        else {
+            var listOfPlatforms = ""
+            for (platform in platforms) {
+                for (game in platform.games) {
+                    if (game.gameName.contains(searchString, ignoreCase = true)) {
+                        listOfPlatforms += "${platform.platformId}: ${platform.platformTitle} \n\t${game}\n"
+                    }
+                }
+            }
+            if (listOfPlatforms == "") "No games found for: $searchString"
+            else listOfPlatforms
+        }
+    }
+
+    fun listUnfinishedGames(): String =
+        if (numberOfPlatforms() == 0) "No platforms stored"
+        else {
+            var listUnfinishedGames = ""
+            for (platform in platforms) {
+                for (game in platform.games) {
+                    if (!game.didYouCompleteGame) {
+                        listUnfinishedGames += platform.platformTitle + ": " + game.gameName + "\n"
+                    }
+                }
+            }
+            listUnfinishedGames
+        }
+
+    fun numberOfUnfinishedGames(): Int {
+        var numberOfUnfinishedGames = 0
+        for (platform in platforms) {
+            for (game in platform.games) {
+                if (!game.didYouCompleteGame) {
+                    numberOfUnfinishedGames++
+                }
+            }
+        }
+        return numberOfUnfinishedGames
+    }
 
 }
+

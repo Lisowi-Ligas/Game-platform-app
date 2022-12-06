@@ -24,11 +24,11 @@ class PlatformAPITest {
 
     @BeforeEach
     fun setup(){
-        Windows = Platform("Windows", "PC", "1200 Euro", 7,10,false)
-        Linux = Platform("Linux", "PC", "1200 Euro",5,9, false)
-        Mac = Platform("Mac", "Apple", "2000 Euro", 6, 1,false)
-        Xbox = Platform("Xbox", "XboxSeriesX", "500 Euro", 7,5,false)
-        Playstation = Platform("Playstation", "5", "500", 7,5,false)
+        Windows = Platform(0,"Windows", "PC", "1200 Euro", 7,10,false)
+        Linux = Platform(0,"Linux", "PC", "1200 Euro",5,9, false)
+        Mac = Platform(0,"Mac", "Apple", "2000 Euro", 6, 1,false)
+        Xbox = Platform(0,"Xbox", "XboxSeriesX", "500 Euro", 7,5,false)
+        Playstation = Platform(0,"Playstation", "5", "500", 7,5,false)
 
         //adding 5 platform to the platforms api
         populatedPlatforms!!.add(Windows!!)
@@ -51,7 +51,7 @@ class PlatformAPITest {
 
     @Test
     fun `adding a Platform to a populated list adds to ArrayList`(){
-        val newPlatform = Platform("NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
+        val newPlatform = Platform(0,"NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
         assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
         assertTrue(populatedPlatforms!!.add(newPlatform))
         assertEquals(6, populatedPlatforms!!.numberOfPlatforms())
@@ -60,7 +60,7 @@ class PlatformAPITest {
 
     @Test
     fun `adding a Platform to an empty list adds to ArrayList`(){
-        val newPlatform = Platform("NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
+        val newPlatform = Platform(0,"NintendoSwitch", "NintendoSwitch", "200 Euro", 3,5,false)
         assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
         assertTrue(emptyPlatforms!!.add(newPlatform))
         assertEquals(1, emptyPlatforms!!.numberOfPlatforms())
@@ -186,9 +186,9 @@ class PlatformAPITest {
     inner class UpdatePlatforms {
         @Test
         fun `updating a platform that does not exist returns false`(){
-            assertFalse(populatedPlatforms!!.updatePlatform(6, Platform("Updating Platform", "Title", "1200 Euro", 8,10,false)))
-            assertFalse(populatedPlatforms!!.updatePlatform(-1, Platform("Updating Platform", "Title", "1400 Euro", 8,10,false)))
-            assertFalse(emptyPlatforms!!.updatePlatform(0, Platform("Updating Platform", "Title", "1300 Euro", 8,10,false)))
+            assertFalse(populatedPlatforms!!.updatePlatform(6, Platform(0,"Updating Platform", "Title", "1200 Euro", 8,10,false)))
+            assertFalse(populatedPlatforms!!.updatePlatform(-1, Platform(0,"Updating Platform", "Title", "1400 Euro", 8,10,false)))
+            assertFalse(emptyPlatforms!!.updatePlatform(0, Platform(0,"Updating Platform", "Title", "1300 Euro", 8,10,false)))
         }
 
         @Test
@@ -202,7 +202,7 @@ class PlatformAPITest {
             assertEquals(5, populatedPlatforms!!.findPlatform(4)!!.platformVersion)
 
             //update platform 5 with new information and ensure contents updated successfully
-            assertTrue(populatedPlatforms!!.updatePlatform(4, Platform("Updating Platform", "Title", "1000 Euro",8,10, false)))
+            assertTrue(populatedPlatforms!!.updatePlatform(4, Platform(0,"Updating Platform", "Title", "1000 Euro",8,10, false)))
             assertEquals("Updating Platform", populatedPlatforms!!.findPlatform(4)!!.platformModel)
             assertEquals("Title", populatedPlatforms!!.findPlatform(4)!!.platformTitle)
             assertEquals("1000 Euro", populatedPlatforms!!.findPlatform(4)!!.platformCost)

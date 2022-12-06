@@ -1,9 +1,11 @@
 import controllers.PlatformAPI
+import models.Game
 import models.Platform
 import mu.KotlinLogging
 import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.ScannerInput
+import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import java.io.File
@@ -28,10 +30,10 @@ fun mainMenu(): Int {
          > ----------------------------------
          > | Game Menu                      |
          > |   7) Add a game                |
-         > |   8) List all games            |
+         > |   8) List unfinished games     |
          > |   9) Update a game             |
          > |   10) Delete a game            |
-         > |   11) Archive a game           |
+         > |   11) Game status              |
          > |   12) Search a game            |
          > ----------------------------------
          > |   20) Save platforms           |
@@ -51,6 +53,13 @@ fun runMenu() {
             3 -> updatePlatform()
             4 -> deletePlatform()
             5 -> archivePlatform()
+            6 -> searchPlatforms()
+            7 -> addGameToPlatform()
+            8 -> listUnfinishedGames()
+            9 -> updateGameInfoInPlatform()
+            10 -> deleteGame()
+            11 -> markGameStatus()
+            12 -> searchGames()
             20 -> save()
             21 -> load()
             0 -> exitApp()
@@ -96,7 +105,7 @@ fun addPlatform(){
     val platformCost = readNextLine("Enter a cost for the platform: ")
     val platformPopularity = readNextInt("Enter a popularity (1-low, 2, 3, 4, 5, 6, 7, 8, 9, 10-high): ")
     val platformVersion = readNextInt("Enter a version for the platform: ")
-    val isAdded = platformAPI.add(Platform(platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false))
+    val isAdded = platformAPI.add(Platform(0, platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false))
 
     if (isAdded) {
         println("Added Successfully")
@@ -119,7 +128,7 @@ fun updatePlatform() {
             val platformVersion = readNextInt("Enter a version for the platform: ")
 
             //pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (platformAPI.updatePlatform(indexToUpdate, Platform(platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false ))){
+            if (platformAPI.updatePlatform(indexToUpdate, Platform(0,platformModel, platformTitle, platformCost, platformPopularity, platformVersion, false ))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -199,4 +208,113 @@ fun searchPlatforms() {
     } else {
         println(searchResults)
     }
+}
+
+private fun addGameToPlatform() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        if (platform.addGame(Game(gameName = readNextLine("\t Game Name: "),gameGenre = readNextLine("\t Game Genre: "),gameAgeRating = readNextInt("\t Game Age Rating: "),gameStar = readNextLine("\t Game Star Rating: "))))
+            println("Add Successful!")
+        else println("Add NOT Successful")
+    }
+}
+
+fun updateGameInfoInPlatform() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            val newName = readNextLine("Enter new name: ")
+            val newGenre = readNextLine("Enter new genre: ")
+            val newAgeRating = readNextInt("Enter new age rating: ")
+            val newStarRating = readNextLine("Enter new star rating: ")
+            if (platform.update(game.gameId, Game(gameName = newName,gameGenre = newGenre,gameAgeRating = newAgeRating,gameStar = newStarRating))) {
+                println("Game contents updated")
+            } else {
+                println("Game contents NOT updated")
+            }
+        } else {
+            println("Invalid Item Id")
+        }
+    }
+}
+
+private fun askUserToChooseGame(platform: Platform): Game? {
+    if (platform.numberOfGames() > 0) {
+        print(platform.listGames())
+        return platform.findOne(readNextInt("\nEnter the id of the game: "))
+    }
+    else{
+        println ("No games for chosen platform")
+        return null
+    }
+}
+
+private fun askUserToChooseActivePlatform(): Platform? {
+    listActivePlatforms()
+    if (platformAPI.numberOfActivePlatforms() > 0) {
+        val platform = platformAPI.findPlatform(readNextInt("\nEnter the id of the platform: "))
+        if (platform != null) {
+            if (platform.isPlatformDiscontinued) {
+                println("Platform is NOT Active, it is Discontinued")
+            } else {
+                return platform //chosen platform is active
+            }
+        } else {
+            println("Platform id is not valid")
+        }
+    }
+    return null //selected platform is not active
+}
+
+fun deleteGame() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            val isDeleted = platform.delete(game.gameId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+
+fun markGameStatus() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            var changeStatus = 'X'
+            if (game.didYouCompleteGame) {
+                changeStatus = readNextChar("The game is currently complete...do you want to mark it as Unfinished?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    game.didYouCompleteGame = false
+            }
+            else {
+                changeStatus = readNextChar("The game is currently Unfinished...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    game.didYouCompleteGame = true
+            }
+        }
+    }
+}
+
+fun searchGames() {
+    val searchName = readNextLine("Enter the game name to search by: ")
+    val searchResults = platformAPI.searchGameByName(searchName)
+    if (searchResults.isEmpty()) {
+        println("No games found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun listUnfinishedGames(){
+    if (platformAPI.numberOfUnfinishedGames() > 0) {
+        println("Total Unfinished games: ${platformAPI.numberOfUnfinishedGames()}")
+    }
+    println(platformAPI.listUnfinishedGames())
 }
