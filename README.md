@@ -98,6 +98,49 @@ I added: Add a platform, List all platforms, Update platform, Delete platform an
     private val platformAPI = PlatformAPI(JSONSerializer(File("platforms.json)))
     3. JUnit tests
     4. Added a pull request, closed the issue and deleted the branch
-    
 
+14. Archive a Platform
+    1. Created a new issue and a branch
+    2. Created a new menu item:
+    Archive a Platform
+    3. Updated the menu and added the new function to PlatformAPI Main.kt
+    4. JUnit tests
+    5. Added pull request, closed the issue and deleted the branch
+
+15. List Submenu
+    1. Created a new issue and a new branch
+    2. Created a menu 2 called Submenu
+    2. Updated the main.kt and added new functions:
+    fun listAllPlatforms(), fun listArchivedPlatforms()
+    3. Updated the ReadMe
+    4. Created a new tagged release V3.0
+    5. Created a pull request, closed the issue and deleted the branch
+    
+16. Tracked Files
+    1. updated the gitignore folder so it ignores the build folder
+
+17. Lambdas Counting
+    1. Created a new issue and a new branch
+    2. Refactoring the number of active platforms
+    3. Refactoring the number of Discontinued Platforms
+    4. Refactoring the number of Platforms by popularity
+    5. JUnit tests
+    6. Created a pull request, closed the issue and deleted the branch
+    
+18. Lambdas List all, Listing
+    1. Created a new issue and a new branch: Refactoring-lambda-list
+    2. JUnit tests
+    3. Refactoring list all platforms in the PlatformAPI
+    4. Refactoring list discontinued platforms
+    5. Refactoring list active Platforms
+    6. Created a pull request, closed the issue and deleted the branch
+    
+19. Lambdas Searching & Refactoring
+    1. Created a new issue and a new branch
+    2. Added fun searchByTitle() in the platformAPI
+    2. Updated the main by adding fun searchPlatforms()
+    3. JUnit testing
+    4. Refactoring the joinString in my platforms:
+    5. fun numberOfDiscontinuedPlatforms, listAllPlatforms, listActivePlatforms, listDiscontinuedPlatforms, listPlatformsBySelectedPopularity
+    5. Created a pull request, closed the issue and deleted the branch
 

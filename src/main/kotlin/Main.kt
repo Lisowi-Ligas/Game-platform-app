@@ -23,7 +23,16 @@ fun mainMenu(): Int {
          > |   2) List all platforms        |
          > |   3) Update a platform         |
          > |   4) Delete a platform         |
-         > |   5) Archive a platform        |
+         > |   5) Discontinue a platform    |
+         > |   6) Search a platform         |
+         > ----------------------------------
+         > | Game Menu                      |
+         > |   7) Add a game                |
+         > |   8) List all games            |
+         > |   9) Update a game             |
+         > |   10) Delete a game            |
+         > |   11) Archive a game           |
+         > |   12) Search a game            |
          > ----------------------------------
          > |   20) Save platforms           |
          > |   21) Load platforms           |
