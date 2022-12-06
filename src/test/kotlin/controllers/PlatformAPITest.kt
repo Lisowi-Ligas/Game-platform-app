@@ -292,4 +292,27 @@ class PlatformAPITest {
         assertEquals(storingPlatforms.findPlatform(2), loadedPlatforms.findPlatform(2))
     }
 
+    @Nested
+    inner class ArchivePlatforms {
+        @Test
+        fun `archiving a platform that does not exist returns false`(){
+            assertFalse(populatedPlatforms!!.archivePlatform(6))
+            assertFalse(populatedPlatforms!!.archivePlatform(-1))
+            assertFalse(emptyPlatforms!!.archivePlatform(0))
+        }
+
+        @Test
+        fun `archiving an already archived platform returns false`(){
+            assertFalse(populatedPlatforms!!.findPlatform(2)!!.isPlatformDiscontinued)
+            assertTrue(populatedPlatforms!!.archivePlatform(2))
+        }
+
+        @Test
+        fun `archiving an active platform that exists returns true and archives`() {
+            assertFalse(populatedPlatforms!!.findPlatform(1)!!.isPlatformDiscontinued)
+            assertTrue(populatedPlatforms!!.archivePlatform(1))
+            assertTrue(populatedPlatforms!!.findPlatform(1)!!.isPlatformDiscontinued)
+        }
+    }
+
 }

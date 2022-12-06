@@ -12,32 +12,40 @@ import java.lang.System.exit
 //private val platformAPI = PlatformAPI(XMLSerializer(File("platforms.xml")))
 private val platformAPI = PlatformAPI(JSONSerializer(File("platforms.json")))
 
-fun mainMenu() : Int {
-    return ScannerInput.readNextInt(""" 
+fun mainMenu(): Int {
+    return readNextInt(
+        """ 
          > ----------------------------------
-         > |        PLATFORM GAME APP       |
+         > |        Platform APP            |
          > ----------------------------------
-         > | PLATFORM MENU                  |
+         > | Platform MENU                  |
          > |   1) Add a platform            |
          > |   2) List all platforms        |
          > |   3) Update a platform         |
          > |   4) Delete a platform         |
+         > |   5) Archive a platform        |
          > ----------------------------------
+         > |   20) Save platforms           |
+         > |   21) Load platforms           |
          > |   0) Exit                      |
          > ----------------------------------
-         > ==>> """.trimMargin(">"))
+         > ==>> """.trimMargin(">")
+    )
 }
 
 fun runMenu() {
     do {
         val option = mainMenu()
         when (option) {
-            1  -> addPlatform()
-            2  -> listPlatforms()
-            3  -> updatePlatform()
-            4  -> deletePlatform()
-            0  -> exitApp()
-            else -> println("Invalid option entered: ${option}")
+            1 -> addPlatform()
+            2 -> listPlatforms()
+            3 -> updatePlatform()
+            4 -> deletePlatform()
+            5 -> archivePlatform()
+            20 -> save()
+            21 -> load()
+            0 -> exitApp()
+            else -> System.out.println("Invalid option entered: ${option}")
         }
     } while (true)
 }
@@ -128,5 +136,23 @@ fun load() {
         platformAPI.load()
     } catch (e: Exception) {
         System.err.println("Error reading from file: $e")
+    }
+}
+
+fun listActivePlatforms() {
+    println(platformAPI.listActivePlatforms())
+}
+
+fun archivePlatform() {
+    listActivePlatforms()
+    if (platformAPI.numberOfActivePlatforms() > 0) {
+        //only ask the user to choose the platform to archive if active platforms exist
+        val indexToArchive = readNextInt("Enter the index of the platform to archive: ")
+        //pass the index of the platform to PlatformAPI for archiving and check for success.
+        if (platformAPI.archivePlatform(indexToArchive)) {
+            println("Archive Successful!")
+        } else {
+            println("Archive NOT Successful")
+        }
     }
 }

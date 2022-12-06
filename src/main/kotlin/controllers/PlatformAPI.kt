@@ -156,4 +156,15 @@ class PlatformAPI(serializerType: Serializer){
         serializer.write(platforms)
     }
 
+    fun archivePlatform(indexToArchive: Int): Boolean {
+        if (isValidIndex(indexToArchive)) {
+            val platformToArchive = platforms[indexToArchive]
+            if (!platformToArchive.isPlatformDiscontinued) {
+                platformToArchive.isPlatformDiscontinued = true
+                return true
+            }
+        }
+        return false
+    }
+
 }
