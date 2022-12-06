@@ -30,7 +30,7 @@ fun mainMenu(): Int {
          > ----------------------------------
          > | Game Menu                      |
          > |   7) Add a game                |
-         > |   8) List all games            |
+         > |   8) List unfinished games     |
          > |   9) Update a game             |
          > |   10) Delete a game            |
          > |   11) Game status              |
@@ -55,9 +55,11 @@ fun runMenu() {
             5 -> archivePlatform()
             6 -> searchPlatforms()
             7 -> addGameToPlatform()
+            8 -> listUnfinishedGames()
             9 -> updateGameInfoInPlatform()
             10 -> deleteGame()
             11 -> markGameStatus()
+            12 -> searchGames()
             20 -> save()
             21 -> load()
             0 -> exitApp()
@@ -298,4 +300,21 @@ fun markGameStatus() {
             }
         }
     }
+}
+
+fun searchGames() {
+    val searchName = readNextLine("Enter the game name to search by: ")
+    val searchResults = platformAPI.searchGameByName(searchName)
+    if (searchResults.isEmpty()) {
+        println("No games found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun listUnfinishedGames(){
+    if (platformAPI.numberOfUnfinishedGames() > 0) {
+        println("Total Unfinished games: ${platformAPI.numberOfUnfinishedGames()}")
+    }
+    println(platformAPI.listUnfinishedGames())
 }

@@ -111,4 +111,47 @@ class PlatformAPI(serializerType: Serializer){
             platforms.filter { platform -> platform.platformTitle.contains(searchString, ignoreCase = true) })
 
 
+    fun searchGameByName(searchString: String): String {
+        return if (numberOfPlatforms() == 0) "No platforms stored"
+        else {
+            var listOfPlatforms = ""
+            for (platform in platforms) {
+                for (game in platform.games) {
+                    if (game.gameName.contains(searchString, ignoreCase = true)) {
+                        listOfPlatforms += "${platform.platformId}: ${platform.platformTitle} \n\t${game}\n"
+                    }
+                }
+            }
+            if (listOfPlatforms == "") "No games found for: $searchString"
+            else listOfPlatforms
+        }
+    }
+
+    fun listUnfinishedGames(): String =
+        if (numberOfPlatforms() == 0) "No platforms stored"
+        else {
+            var listUnfinishedGames = ""
+            for (platform in platforms) {
+                for (game in platform.games) {
+                    if (!game.didYouCompleteGame) {
+                        listUnfinishedGames += platform.platformTitle + ": " + game.gameName + "\n"
+                    }
+                }
+            }
+            listUnfinishedGames
+        }
+
+    fun numberOfUnfinishedGames(): Int {
+        var numberOfUnfinishedGames = 0
+        for (platform in platforms) {
+            for (game in platform.games) {
+                if (!game.didYouCompleteGame) {
+                    numberOfUnfinishedGames++
+                }
+            }
+        }
+        return numberOfUnfinishedGames
+    }
+
 }
+
