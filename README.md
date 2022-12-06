@@ -144,3 +144,29 @@ I added: Add a platform, List all platforms, Update platform, Delete platform an
     5. fun numberOfDiscontinuedPlatforms, listAllPlatforms, listActivePlatforms, listDiscontinuedPlatforms, listPlatformsBySelectedPopularity
     5. Created a pull request, closed the issue and deleted the branch
 
+20. Created a Game menu
+    1. added utilities.kt
+    2. added a game to the models package
+
+21. Added games to platform
+    1. added findOne functionality for the games collection
+    2. added update and delete functionality
+    3. added list functionality to the games collection
+    4. added toString functionality
+    
+22. Item menu options
+    1. added game to platform
+    added the function private fun addGameToPlatform()
+    3. added updateGameNameInPlatform()
+    added the function fun updateGameNameInPlatform
+    4. added this helper function:
+    private fun askUserToChooseGame()
+    5. added delete a game from a platform
+    fun deleteGame()
+    6. added function fun markGameStatus
+    
+23. Search Games
+    1. added searchGames
+    added fun searchGames() function
+    2. added listUnfinishedGames
+    added fun listUnfinishedGames() function
