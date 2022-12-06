@@ -33,33 +33,16 @@ class PlatformAPI(serializerType: Serializer){
         return (index >= 0 && index < list.size)
     }
 
-    fun listActivePlatforms(): String {
-        return if (numberOfActivePlatforms() == 0) {
-            "No active platforms stored"
-        } else {
-            var listOfActivePlatforms = ""
-            for (platform in platforms) {
-                if (!platform.isPlatformDiscontinued) {
-                    listOfActivePlatforms += "${platforms.indexOf(platform)}: $platform \n"
-                }
-            }
-            listOfActivePlatforms
-        }
-    }
 
-    fun listDiscontinuedPlatforms(): String {
-        return if (numberOfDiscontinuedPlatforms() == 0) {
-            "No archived notes stored"
-        } else {
-            var listOfDiscontinuedPlatforms = ""
-            for (platform in platforms) {
-                if (platform.isPlatformDiscontinued) {
-                    listOfDiscontinuedPlatforms += "${platforms.indexOf(platform)}: $platform \n"
-                }
-            }
-            listOfDiscontinuedPlatforms
-        }
-    }
+    fun listActivePlatforms(): String =
+        if  (platforms.isEmpty()) "No active platforms stored"
+        else platforms.joinToString (separator = "\n") { platform ->
+            platforms.indexOf(platform).toString() + ": " + platform.toString() }
+
+    fun listDiscontinuedPlatforms(): String =
+        if  (platforms.isEmpty()) "No platforms stored"
+        else platforms.joinToString (separator = "\n") { platform ->
+            platforms.indexOf(platform).toString() + ": " + platform.toString() }
 
     fun numberOfDiscontinuedPlatforms(): Int {
         return platforms.stream()
