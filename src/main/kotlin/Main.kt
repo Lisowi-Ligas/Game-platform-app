@@ -5,6 +5,7 @@ import mu.KotlinLogging
 import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.ScannerInput
+import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import java.io.File
@@ -32,7 +33,7 @@ fun mainMenu(): Int {
          > |   8) List all games            |
          > |   9) Update a game             |
          > |   10) Delete a game            |
-         > |   11) Archive a game           |
+         > |   11) Game status              |
          > |   12) Search a game            |
          > ----------------------------------
          > |   20) Save platforms           |
@@ -55,6 +56,8 @@ fun runMenu() {
             6 -> searchPlatforms()
             7 -> addGameToPlatform()
             9 -> updateGameInfoInPlatform()
+            10 -> deleteGame()
+            11 -> markGameStatus()
             20 -> save()
             21 -> load()
             0 -> exitApp()
@@ -260,4 +263,39 @@ private fun askUserToChooseActivePlatform(): Platform? {
         }
     }
     return null //selected platform is not active
+}
+
+fun deleteGame() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            val isDeleted = platform.delete(game.gameId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+
+fun markGameStatus() {
+    val platform: Platform? = askUserToChooseActivePlatform()
+    if (platform != null) {
+        val game: Game? = askUserToChooseGame(platform)
+        if (game != null) {
+            var changeStatus = 'X'
+            if (game.didYouCompleteGame) {
+                changeStatus = readNextChar("The game is currently complete...do you want to mark it as Unfinished?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    game.didYouCompleteGame = false
+            }
+            else {
+                changeStatus = readNextChar("The game is currently Unfinished...do you want to mark it as Complete?")
+                if ((changeStatus == 'Y') ||  (changeStatus == 'y'))
+                    game.didYouCompleteGame = true
+            }
+        }
+    }
 }

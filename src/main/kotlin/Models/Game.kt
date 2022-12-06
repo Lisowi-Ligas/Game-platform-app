@@ -6,3 +6,12 @@ data class Game (var gameId: Int = 0,
                  var gameAgeRating : Int,
                  var gameStar : String,
                  var didYouCompleteGame: Boolean = false)
+
+{
+    override fun toString() =
+        if (didYouCompleteGame)
+            "$gameId: $gameName (Complete)"
+        else
+            "$gameId: $gameName (Unfinished)"
+
+}
