@@ -15,8 +15,7 @@ class PlatformAPI(serializerType: Serializer){
 
     fun listAllPlatforms(): String =
         if  (platforms.isEmpty()) "No platforms stored"
-        else platforms.joinToString (separator = "\n") { platform ->
-            platforms.indexOf(platform).toString() + ": " + platform.toString() }
+        else formatListString(platforms)
 
     fun numberOfPlatforms(): Int {
         return platforms.size
@@ -35,56 +34,26 @@ class PlatformAPI(serializerType: Serializer){
 
 
     fun listActivePlatforms(): String =
-        if  (platforms.isEmpty()) "No active platforms stored"
-        else platforms.joinToString (separator = "\n") { platform ->
-            platforms.indexOf(platform).toString() + ": " + platform.toString() }
+        if  (numberOfActivePlatforms() == 0)  "No active platforms stored"
+        else formatListString(platforms.filter { platform -> !platform.isPlatformDiscontinued})
 
     fun listDiscontinuedPlatforms(): String =
-        if  (platforms.isEmpty()) "No platforms stored"
-        else platforms.joinToString (separator = "\n") { platform ->
-            platforms.indexOf(platform).toString() + ": " + platform.toString() }
+        if  (numberOfDiscontinuedPlatforms() == 0) "No archived platforms stored"
+        else formatListString(platforms.filter { platform -> platform.isPlatformDiscontinued})
 
-    fun numberOfDiscontinuedPlatforms(): Int {
-        return platforms.stream()
-            .filter{platform: Platform -> platform.isPlatformDiscontinued}
-            .count()
-            .toInt()
-    }
+    fun numberOfDiscontinuedPlatforms(): Int = platforms.count { platform: Platform -> platform.isPlatformDiscontinued }
 
+    fun numberOfActivePlatforms(): Int = platforms.count { platform: Platform -> !platform.isPlatformDiscontinued }
 
-    fun numberOfActivePlatforms(): Int {
-        return platforms.stream()
-            .filter{platform: Platform -> !platform.isPlatformDiscontinued}
-            .count()
-            .toInt()
-    }
-
-    fun listPlatformsBySelectedPopularity(popularity: Int): String {
-        return if (platforms.isEmpty()) {
-            "No platforms stored"
-        } else {
-            var listOfPlatforms = ""
-            for (i in platforms.indices) {
-                if (platforms[i].platformPopularity == popularity) {
-                    listOfPlatforms +=
-                        """$i: ${platforms[i]}
-                        """.trimIndent()
-                }
-            }
-            if (listOfPlatforms.equals("")) {
-                "No platforms with popularity: $popularity"
-            } else {
-                "${numberOfPlatformsByPopularity(popularity)} platforms with popularity $popularity: $listOfPlatforms"
-            }
+    fun listPlatformsBySelectedPopularity(popularity: Int): String =
+        if (platforms.isEmpty()) "No platforms stored"
+        else {
+            val listOfPlatforms = formatListString(platforms.filter{ platform -> platform.platformPopularity == popularity})
+            if (listOfPlatforms.equals("")) "No platforms with popularity: $popularity"
+            else "${numberOfPlatformsByPopularity(popularity)} platforms with popularity $popularity: $listOfPlatforms"
         }
-    }
 
-    fun numberOfPlatformsByPopularity(popularity: Int): Int {
-        return platforms.stream()
-            .filter{platform: Platform -> platform.platformPopularity == popularity}
-            .count()
-            .toInt()
-    }
+    fun numberOfPlatformsByPopularity(popularity: Int): Int = platforms.count { platform: Platform -> platform.platformPopularity == popularity}
 
 
     fun deletePlatform(indexToDelete: Int): Platform? {
@@ -136,6 +105,13 @@ class PlatformAPI(serializerType: Serializer){
         return false
     }
 
+    fun searchByTitle (searchString : String) =
+        formatListString(
+            platforms.filter { platform -> platform.platformTitle.contains(searchString, ignoreCase = true) })
 
+    private fun formatListString(platformsToFormat : List<Platform>) : String =
+        platformsToFormat
+            .joinToString (separator = "\n") { platform ->
+                platforms.indexOf(platform).toString() + ": " + platform.toString() }
 
 }

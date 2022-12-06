@@ -181,3 +181,13 @@ fun archivePlatform() {
         }
     }
 }
+
+fun searchPlatforms() {
+    val searchTitle = readNextLine("Enter the description to search by: ")
+    val searchResults = platformAPI.searchByTitle(searchTitle)
+    if (searchResults.isEmpty()) {
+        println("No platforms found")
+    } else {
+        println(searchResults)
+    }
+}
