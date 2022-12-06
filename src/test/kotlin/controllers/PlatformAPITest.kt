@@ -347,4 +347,42 @@ class PlatformAPITest {
         }
     }
 
+    @Nested
+    inner class SearchMethods {
+
+        @Test
+        fun `search platforms by title returns no platforms when no platforms with that title exist`() {
+            //Searching a populated collection for a title that doesn't exist.
+            assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+            val searchResults = populatedPlatforms!!.searchByTitle("no results expected")
+            assertTrue(searchResults.isEmpty())
+
+            //Searching an empty collection
+            assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
+            assertTrue(emptyPlatforms!!.searchByTitle("").isEmpty())
+        }
+
+        @Test
+        fun `search platforms by title returns platforms when platforms with that title exist`() {
+            assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+
+            //Searching a populated collection for a full title that exists (case matches exactly)
+            var searchResults = populatedPlatforms!!.searchByTitle("Code App")
+            assertFalse(searchResults.contains("Code App"))
+            assertFalse(searchResults.contains("Test App"))
+
+            //Searching a populated collection for a partial title that exists (case matches exactly)
+            searchResults = populatedPlatforms!!.searchByTitle("App")
+            assertFalse(searchResults.contains("Code App"))
+            assertFalse(searchResults.contains("Test App"))
+            assertFalse(searchResults.contains("Playstation"))
+
+            //Searching a populated collection for a partial title that exists (case doesn't match)
+            searchResults = populatedPlatforms!!.searchByTitle("App1")
+            assertFalse(searchResults.contains("Code App"))
+            assertFalse(searchResults.contains("Test App"))
+            assertFalse(searchResults.contains("Playstation"))
+        }
+    }
+
 }
