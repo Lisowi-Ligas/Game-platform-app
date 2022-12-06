@@ -50,6 +50,36 @@ fun runMenu() {
     } while (true)
 }
 
+fun listPlatforms() {
+    if (platformAPI.numberOfPlatforms() > 0) {
+        val option = readNextInt(
+            """
+                  > --------------------------------
+                  > |   1) View ALL platforms          |
+                  > |   2) View ACTIVE platforms       |
+                  > |   3) View ARCHIVED platforms     |
+                  > --------------------------------
+         > ==>> """.trimMargin(">"))
+
+        when (option) {
+            1 -> listAllPlatforms();
+            2 -> listActivePlatforms();
+            3 -> listArchivedPlatforms();
+            else -> println("Invalid option entered: " + option);
+        }
+    } else {
+        println("Option Invalid - No platforms stored");
+    }
+}
+
+fun listAllPlatforms() {
+    println(platformAPI.listAllPlatforms())
+}
+
+fun listArchivedPlatforms() {
+    println(platformAPI.listDiscontinuedPlatforms())
+}
+
 fun addPlatform(){
     //logger.info { "addNote() function invoked" }
     val platformModel = readNextLine("Enter a model for the platform: ")
@@ -64,11 +94,6 @@ fun addPlatform(){
     } else {
         println("Add Failed")
     }
-}
-
-fun listPlatforms(){
-    //logger.info { "listNotes() function invoked" }
-    println(platformAPI.listAllPlatforms())
 }
 
 fun updatePlatform() {
