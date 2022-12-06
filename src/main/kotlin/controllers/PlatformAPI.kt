@@ -13,17 +13,10 @@ class PlatformAPI(serializerType: Serializer){
         return platforms.add(platform)
     }
 
-    fun listAllPlatforms(): String {
-        return if (platforms.isEmpty()) {
-            "No platforms stored"
-        } else {
-            var listOfPlatforms = ""
-            for (i in platforms.indices) {
-                listOfPlatforms += "${i}: ${platforms[i]} \n"
-            }
-            listOfPlatforms
-        }
-    }
+    fun listAllPlatforms(): String =
+        if  (platforms.isEmpty()) "No platforms stored"
+        else platforms.joinToString (separator = "\n") { platform ->
+            platforms.indexOf(platform).toString() + ": " + platform.toString() }
 
     fun numberOfPlatforms(): Int {
         return platforms.size
@@ -159,5 +152,7 @@ class PlatformAPI(serializerType: Serializer){
         }
         return false
     }
+
+
 
 }
