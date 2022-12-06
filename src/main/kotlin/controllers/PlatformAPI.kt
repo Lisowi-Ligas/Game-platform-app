@@ -69,23 +69,18 @@ class PlatformAPI(serializerType: Serializer){
     }
 
     fun numberOfDiscontinuedPlatforms(): Int {
-        var counter = 0
-        for (platform in platforms) {
-            if (platform.isPlatformDiscontinued) {
-                counter++
-            }
-        }
-        return counter
+        return platforms.stream()
+            .filter{platform: Platform -> platform.isPlatformDiscontinued}
+            .count()
+            .toInt()
     }
 
+
     fun numberOfActivePlatforms(): Int {
-        var counter = 0
-        for (platform in platforms) {
-            if (!platform.isPlatformDiscontinued) {
-                counter++
-            }
-        }
-        return counter
+        return platforms.stream()
+            .filter{platform: Platform -> !platform.isPlatformDiscontinued}
+            .count()
+            .toInt()
     }
 
     fun listPlatformsBySelectedPopularity(popularity: Int): String {
@@ -109,14 +104,12 @@ class PlatformAPI(serializerType: Serializer){
     }
 
     fun numberOfPlatformsByPopularity(popularity: Int): Int {
-        var counter = 0
-        for (platform in platforms) {
-            if (platform.platformPopularity == popularity) {
-                counter++
-            }
-        }
-        return counter
+        return platforms.stream()
+            .filter{platform: Platform -> platform.platformPopularity == popularity}
+            .count()
+            .toInt()
     }
+
 
     fun deletePlatform(indexToDelete: Int): Platform? {
         return if (isValidListIndex(indexToDelete, platforms)) {

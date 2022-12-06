@@ -315,4 +315,36 @@ class PlatformAPITest {
         }
     }
 
+    @Nested
+    inner class CountingMethods {
+
+        @Test
+        fun numberOfPlatformsCalculatedCorrectly() {
+            assertEquals(5, populatedPlatforms!!.numberOfPlatforms())
+            assertEquals(0, emptyPlatforms!!.numberOfPlatforms())
+        }
+
+        @Test
+        fun numberOfArchivedPlatformsCalculatedCorrectly() {
+            assertEquals(0, populatedPlatforms!!.numberOfDiscontinuedPlatforms())
+            assertEquals(0, emptyPlatforms!!.numberOfDiscontinuedPlatforms())
+        }
+
+        @Test
+        fun numberOfActivePlatformsCalculatedCorrectly() {
+            assertEquals(5, populatedPlatforms!!.numberOfActivePlatforms())
+            assertEquals(0, emptyPlatforms!!.numberOfActivePlatforms())
+        }
+
+        @Test
+        fun numberOfPlatformsByPopularityCalculatedCorrectly() {
+            assertEquals(0, populatedPlatforms!!.numberOfPlatformsByPopularity(1))
+            assertEquals(0, populatedPlatforms!!.numberOfPlatformsByPopularity(2))
+            assertEquals(0, populatedPlatforms!!.numberOfPlatformsByPopularity(3))
+            assertEquals(0, populatedPlatforms!!.numberOfPlatformsByPopularity(4))
+            assertEquals(1, populatedPlatforms!!.numberOfPlatformsByPopularity(5))
+            assertEquals(0, emptyPlatforms!!.numberOfPlatformsByPopularity(1))
+        }
+    }
+
 }
